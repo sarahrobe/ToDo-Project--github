@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class AddToDoViewController: UIViewController {
 
@@ -17,12 +18,32 @@ class AddToDoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
     }
-    
 
     @IBAction func addTapped(_ sender: Any) {
+
+          if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+
+            let toDo = ToDoCD(entity: ToDoCD.entity(), insertInto: context)
+
+            if let titleText = titleTextField.text {
+                // we will take the titleText and assign that value to toDo.name
+                // this .name and .important came from the attributes you typed in on the Core Data page!
+                toDo.name = titleText
+                toDo.important = isImportant.isOn
+            }
+
+            try? context.save()
+
+            navigationController?.popViewController(animated: true)
+          }
+
+        }
+        
+        
+        
+        /*
         let toDo = ToDo()
         
         if let titleText = titleTextField.text {
@@ -34,8 +55,9 @@ class AddToDoViewController: UIViewController {
         
         previousVC.toDos.append(toDo)
         previousVC.tableView.reloadData()
-        navigationController?.popViewController(animated: true) 
-    }
+        navigationController?.popViewController(animated: true)
+            */
+    
     
     /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
